@@ -1,0 +1,1608 @@
+consumes:
+    - application/json
+produces:
+    - application/json
+swagger: "2.0"
+info:
+    version: 0.0.4
+    description: Unified Promo Management API documentationo
+    title: Unified Promo Management API
+basePath: /v1/api
+paths:
+    /promo:
+        get:
+            tags:
+                - promo
+            summary: Promo_GET
+            operationId: ListPromo
+            parameters:
+                - enum:
+                    - efisheryku
+                    - efresh
+                    - feedhub
+                    - fish-in-tools
+                    - tambakan
+                    - ffms
+                  type: string
+                  x-go-custom-tag: binding:"required,oneof='efisheryku' 'efresh' 'feedhub' 'fish-in-tools' 'tambakan' 'ffms'"
+                  description: App identifier.
+                  name: X-App-Id
+                  in: header
+                  required: true
+                - enum:
+                    - offset
+                    - cursor
+                  type: string
+                  x-go-name: PaginationType
+                  description: Pagination type
+                  name: type
+                  in: query
+                  required: true
+                - type: string
+                  x-go-name: PaginationQuery
+                  description: Pagination query
+                  name: query
+                  in: query
+                  required: true
+            responses:
+                "200":
+                    description: Get list of promo successfully.
+                    schema:
+                        $ref: '#/definitions/listPromoResponse'
+                "400":
+                    description: PublicHTTPValidationError
+                    schema:
+                        $ref: '#/definitions/publicHttpValidationError'
+                "401":
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                    description: AuthUnauthorizedResponse
+                "403":
+                    description: AuthForbiddenResponse
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                "500":
+                    description: InternalServerError
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+            security:
+                - bearerAuth: []
+            description: List promo for internal dashboard.
+            produces:
+                - application/json
+        post:
+            security:
+                - bearerAuth: []
+            description: Create promo.
+            consumes:
+                - application/json
+            operationId: CreatePromo
+            responses:
+                "200":
+                    description: Create promo successfully.
+                    schema:
+                        $ref: '#/definitions/commonPromoResponse'
+                "400":
+                    description: PublicHTTPValidationError
+                    schema:
+                        $ref: '#/definitions/publicHttpValidationError'
+                "401":
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                    description: AuthUnauthorizedResponse
+                "403":
+                    description: AuthForbiddenResponse
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                "500":
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                    description: InternalServerError
+            produces:
+                - application/json
+            tags:
+                - promo
+            summary: Promo_POST
+            parameters:
+                - in: header
+                  required: true
+                  enum:
+                    - efisheryku
+                    - efresh
+                    - feedhub
+                    - fish-in-tools
+                    - tambakan
+                    - ffms
+                  type: string
+                  x-go-custom-tag: binding:"required,oneof='efisheryku' 'efresh' 'feedhub' 'fish-in-tools' 'tambakan' 'ffms'"
+                  description: App identifier.
+                  name: X-App-Id
+                - enum:
+                    - application/json
+                  type: string
+                  description: Content type JSON
+                  name: Content-Type
+                  in: header
+                - name: body
+                  in: body
+                  schema:
+                    $ref: '#/definitions/commonPromoRequest'
+    /promo/apply:
+        post:
+            description: Apply a promo to an order.
+            summary: PromoApply_POST
+            operationId: ApplyPromo
+            parameters:
+                - enum:
+                    - efisheryku
+                    - efresh
+                    - feedhub
+                    - fish-in-tools
+                    - tambakan
+                    - ffms
+                  type: string
+                  x-go-custom-tag: binding:"required,oneof='efisheryku' 'efresh' 'feedhub' 'fish-in-tools' 'tambakan' 'ffms'"
+                  description: App identifier.
+                  name: X-App-Id
+                  in: header
+                  required: true
+                - enum:
+                    - application/json
+                  type: string
+                  description: Content type JSON
+                  name: Content-Type
+                  in: header
+                - schema:
+                    $ref: '#/definitions/applyPromoRequest'
+                  name: body
+                  in: body
+            security:
+                - bearerAuth: []
+            produces:
+                - application/json
+            tags:
+                - promo
+            responses:
+                "200":
+                    description: Apply promo successfully.
+                    schema:
+                        $ref: '#/definitions/applyPromoResponse'
+            consumes:
+                - application/json
+    /promo/filter-by-order:
+        post:
+            operationId: ListPromoByOrder
+            parameters:
+                - x-go-custom-tag: binding:"required,oneof='efisheryku' 'efresh' 'feedhub' 'fish-in-tools' 'tambakan' 'ffms'"
+                  description: App identifier.
+                  name: X-App-Id
+                  in: header
+                  required: true
+                  enum:
+                    - efisheryku
+                    - efresh
+                    - feedhub
+                    - fish-in-tools
+                    - tambakan
+                    - ffms
+                  type: string
+                - name: body
+                  in: body
+                  schema:
+                    $ref: '#/definitions/listPromoByOrderRequest'
+            responses:
+                "200":
+                    description: Get promo successfully.
+                    schema:
+                        $ref: '#/definitions/listPromoByOrderResponse'
+                "400":
+                    description: PublicHTTPValidationError
+                    schema:
+                        $ref: '#/definitions/publicHttpValidationError'
+                "401":
+                    description: AuthUnauthorizedResponse
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                "403":
+                    description: AuthForbiddenResponse
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                "500":
+                    description: InternalServerError
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+            security:
+                - bearerAuth: []
+            description: List promo by order.
+            tags:
+                - promo
+            summary: PromoByOrder_POST
+    /promo/validate:
+        post:
+            security:
+                - bearerAuth: []
+            description: Validate order promo without saving the usage.
+            tags:
+                - promo
+            operationId: ValidatePromo
+            parameters:
+                - enum:
+                    - efisheryku
+                    - efresh
+                    - feedhub
+                    - fish-in-tools
+                    - tambakan
+                    - ffms
+                  type: string
+                  x-go-custom-tag: binding:"required,oneof='efisheryku' 'efresh' 'feedhub' 'fish-in-tools' 'tambakan' 'ffms'"
+                  description: App identifier.
+                  name: X-App-Id
+                  in: header
+                  required: true
+                - type: string
+                  description: Content type JSON
+                  name: Content-Type
+                  in: header
+                  enum:
+                    - application/json
+                - name: body
+                  in: body
+                  schema:
+                    $ref: '#/definitions/applyPromoRequest'
+            responses:
+                "200":
+                    description: Validate promo successfully.
+                    schema:
+                        $ref: '#/definitions/applyPromoResponse'
+    /promo/{promo_id}/status:
+        put:
+            security:
+                - bearerAuth: []
+            produces:
+                - application/json
+            tags:
+                - promo
+            responses:
+                "200":
+                    description: Patch promo status successfully.
+                    schema:
+                        $ref: '#/definitions/commonPromoResponse'
+            description: Update the status of a particular promotion status.
+            consumes:
+                - application/json
+            summary: PromoStatusByPromoId_PUT
+            operationId: PutPromoStatus
+            parameters:
+                - required: true
+                  enum:
+                    - efisheryku
+                    - efresh
+                    - feedhub
+                    - fish-in-tools
+                    - tambakan
+                    - ffms
+                  type: string
+                  x-go-custom-tag: binding:"required,oneof='efisheryku' 'efresh' 'feedhub' 'fish-in-tools' 'tambakan' 'ffms'"
+                  description: App identifier.
+                  name: X-App-Id
+                  in: header
+                - name: promo_id
+                  in: path
+                  required: true
+                  type: string
+                  format: uuid4
+                - type: string
+                  description: Content type JSON
+                  name: Content-Type
+                  in: header
+                  enum:
+                    - application/json
+                - name: body
+                  in: body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/putPromoStatusRequest'
+    /usage/{promo_id}/status:
+        patch:
+            summary: UsageStatusByPromoId_PATCH
+            responses:
+                "200":
+                    description: Patch promo usage successfully.
+                    schema:
+                        $ref: '#/definitions/patchUsageStatusResponse'
+            tags:
+                - usage
+            operationId: PatchPromoUsageStatus
+            parameters:
+                - x-go-custom-tag: binding:"required,oneof='efisheryku' 'efresh' 'feedhub' 'fish-in-tools' 'tambakan' 'ffms'"
+                  description: App identifier.
+                  name: X-App-Id
+                  in: header
+                  required: true
+                  enum:
+                    - efisheryku
+                    - efresh
+                    - feedhub
+                    - fish-in-tools
+                    - tambakan
+                    - ffms
+                  type: string
+                - enum:
+                    - application/json
+                  type: string
+                  description: Content type JSON
+                  name: Content-Type
+                  in: header
+                - type: string
+                  format: uuid4
+                  name: promo_id
+                  in: path
+                  required: true
+                - schema:
+                    $ref: '#/definitions/patchUsageStatusRequest'
+                  name: body
+                  in: body
+            security:
+                - bearerAuth: []
+            description: Update a particular promo usage's status by the order ID
+            consumes:
+                - application/json
+            produces:
+                - application/json
+    /promo/channel/{channel}:
+        get:
+            responses:
+                "401":
+                    description: AuthUnauthorizedResponse
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                "403":
+                    description: AuthForbiddenResponse
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                "500":
+                    description: InternalServerError
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                "200":
+                    schema:
+                        $ref: '#/definitions/listPromoResponse'
+                    description: Get promo successfully.
+                "400":
+                    description: PublicHTTPValidationError
+                    schema:
+                        $ref: '#/definitions/publicHttpValidationError'
+            security:
+                - bearerAuth: []
+            description: List promo by channel.
+            produces:
+                - application/json
+            tags:
+                - promo
+            summary: PromoByChannel_GET
+            operationId: ListPromoByChannel
+            parameters:
+                - enum:
+                    - efisheryku
+                    - efresh
+                    - feedhub
+                    - fish-in-tools
+                    - tambakan
+                    - ffms
+                  type: string
+                  x-go-custom-tag: binding:"required,oneof='efisheryku' 'efresh' 'feedhub' 'fish-in-tools' 'tambakan' 'ffms'"
+                  description: App identifier.
+                  name: X-App-Id
+                  in: header
+                  required: true
+                - required: true
+                  enum:
+                    - feedhub
+                    - efisheryku
+                  type: string
+                  description: The designated channel.
+                  name: channel
+                  in: path
+    /promo/filter-by-user:
+        post:
+            description: List promo by user.
+            tags:
+                - promo
+            summary: PromoByUser_POST
+            operationId: ListPromoByUser
+            parameters:
+                - x-go-custom-tag: binding:"required,oneof='efisheryku' 'efresh' 'feedhub' 'fish-in-tools' 'tambakan' 'ffms'"
+                  description: App identifier.
+                  name: X-App-Id
+                  in: header
+                  required: true
+                  enum:
+                    - efisheryku
+                    - efresh
+                    - feedhub
+                    - fish-in-tools
+                    - tambakan
+                    - ffms
+                  type: string
+                - name: body
+                  in: body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/listPromoByUserRequest'
+            responses:
+                "400":
+                    description: PublicHTTPValidationError
+                    schema:
+                        $ref: '#/definitions/publicHttpValidationError'
+                "401":
+                    description: AuthUnauthorizedResponse
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                "403":
+                    description: AuthForbiddenResponse
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                "500":
+                    description: InternalServerError
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                "200":
+                    description: Get promo successfully.
+                    schema:
+                        $ref: '#/definitions/listPromoByUserResponse'
+            security:
+                - bearerAuth: []
+    /promo/{promo_id}:
+        get:
+            tags:
+                - promo
+            summary: PromoByPromoId_GET
+            operationId: GetPromoByID
+            parameters:
+                - enum:
+                    - efisheryku
+                    - efresh
+                    - feedhub
+                    - fish-in-tools
+                    - tambakan
+                    - ffms
+                  type: string
+                  x-go-custom-tag: binding:"required,oneof='efisheryku' 'efresh' 'feedhub' 'fish-in-tools' 'tambakan' 'ffms'"
+                  description: App identifier.
+                  name: X-App-Id
+                  in: header
+                  required: true
+                - in: path
+                  required: true
+                  type: string
+                  format: uuid4
+                  description: The desired promotion ID.
+                  name: promo_id
+            responses:
+                "200":
+                    description: Get promo successfully.
+                    schema:
+                        $ref: '#/definitions/commonPromoResponse'
+            security:
+                - bearerAuth: []
+            description: Get detail of a promotion data.
+            produces:
+                - application/json
+        put:
+            produces:
+                - application/json
+            tags:
+                - promo
+            parameters:
+                - description: App identifier.
+                  name: X-App-Id
+                  in: header
+                  required: true
+                  enum:
+                    - efisheryku
+                    - efresh
+                    - feedhub
+                    - fish-in-tools
+                    - tambakan
+                    - ffms
+                  type: string
+                  x-go-custom-tag: binding:"required,oneof='efisheryku' 'efresh' 'feedhub' 'fish-in-tools' 'tambakan' 'ffms'"
+                - type: string
+                  format: uuid4
+                  description: The desired promotion ID.
+                  name: promo_id
+                  in: path
+                  required: true
+                - name: Content-Type
+                  in: header
+                  enum:
+                    - application/json
+                  type: string
+                  description: Content type JSON
+                - in: body
+                  schema:
+                    $ref: '#/definitions/commonPromoRequest'
+                  name: body
+            security:
+                - bearerAuth: []
+            description: Update a single promo.
+            consumes:
+                - application/json
+            summary: PromoByPromoId_PUT
+            operationId: PutPromoByID
+            responses:
+                "200":
+                    description: Get promo successfully.
+                    schema:
+                        $ref: '#/definitions/commonPromoResponse'
+        delete:
+            parameters:
+                - name: X-App-Id
+                  in: header
+                  required: true
+                  enum:
+                    - efisheryku
+                    - efresh
+                    - feedhub
+                    - fish-in-tools
+                    - tambakan
+                    - ffms
+                  type: string
+                  x-go-custom-tag: binding:"required,oneof='efisheryku' 'efresh' 'feedhub' 'fish-in-tools' 'tambakan' 'ffms'"
+                  description: App identifier.
+                - in: path
+                  required: true
+                  type: string
+                  format: uuid4
+                  description: The desired promotion ID.
+                  name: promo_id
+            responses:
+                "200":
+                    schema:
+                        $ref: '#/definitions/deletePromoResponse'
+                    description: Delete promo successfully.
+                "400":
+                    description: PublicHTTPValidationError
+                    schema:
+                        $ref: '#/definitions/publicHttpValidationError'
+                "401":
+                    description: AuthUnauthorizedResponse
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                "403":
+                    description: AuthForbiddenResponse
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                "500":
+                    description: InternalServerError
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+            security:
+                - bearerAuth: []
+            description: Soft delete a single promo.
+            produces:
+                - application/json
+            tags:
+                - promo
+            summary: PromoByPromoId_DELETE
+            operationId: DeletePromoByID
+    /usage/orders:
+        post:
+            description: Get promo usage by order IDs
+            tags:
+                - usage
+            operationId: GetPromoUsageByOrderIDs
+            parameters:
+                - description: App identifier.
+                  name: X-App-Id
+                  in: header
+                  required: true
+                  enum:
+                    - efisheryku
+                    - efresh
+                    - feedhub
+                    - fish-in-tools
+                    - tambakan
+                    - ffms
+                  type: string
+                  x-go-custom-tag: binding:"required,oneof='efisheryku' 'efresh' 'feedhub' 'fish-in-tools' 'tambakan' 'ffms'"
+                - name: body
+                  in: body
+                  required: true
+                  schema:
+                    $ref: '#/definitions/getPromoUsageByOrderIDsRequest'
+            responses:
+                "401":
+                    description: AuthUnauthorizedResponse
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                "403":
+                    description: AuthForbiddenResponse
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                "500":
+                    schema:
+                        $ref: '#/definitions/publicHttpError'
+                    description: InternalServerError
+                "200":
+                    description: Get promo usage successfully.
+                    schema:
+                        $ref: '#/definitions/getPromoUsageByOrderIDsResponse'
+                "400":
+                    description: PublicHTTPValidationError
+                    schema:
+                        $ref: '#/definitions/publicHttpValidationError'
+            security:
+                - bearerAuth: []
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            summary: UsageByOrderIds_POST
+definitions:
+    promoType:
+        type: string
+        title: PromoType
+        enum:
+            - fixed
+            - percentage
+        x-go-custom-tag: binding:"required,oneof='percentage' 'fixed'"
+    usageTotalOrderAmount:
+        description: the total order amount user have
+        type: number
+        format: double
+    promoWithValidation:
+        type: object
+        title: PromoWithValidation
+        properties:
+            promo:
+                $ref: '#/definitions/promoWithRules'
+            skus:
+                description: the sku affected by the promo
+                type: array
+                items:
+                    type: string
+                x-omitempty: false
+                example:
+                    - !!float 1
+                    - !!float 2
+            total_amount:
+                description: the total discount amount user got
+                type: number
+                format: double
+                x-omitempty: false
+                example: !!float 100000
+            is_valid:
+                type: boolean
+                x-omitempty: false
+                example: true
+            message:
+                type: string
+                example: A message of validation
+            price_lists:
+                description: the pricelist affected by the promo
+                type: array
+                items:
+                    type: string
+                x-omitempty: false
+                example:
+                    - !!float 1
+                    - !!float 2
+    usageStatus:
+        type: string
+        enum:
+            - success
+            - canceled
+        x-go-custom-tag: binding:"oneof='success' 'canceled'"
+    promoWithRules:
+        type: object
+        title: PromoWithRules
+        properties:
+            image_url:
+                type: string
+                example: https://efishery.com/banner.png
+            name:
+                x-go-custom-tag: binding:"required"
+                example: Promo Code 1
+                type: string
+            status:
+                $ref: '#/definitions/promoStatus'
+            id:
+                format: uuid4
+                type: string
+            priority:
+                type: integer
+                x-go-custom-tag: binding:"required"
+                example: !!float 10
+            rules:
+                $ref: '#/definitions/ruleResponse'
+            user_id:
+                type: string
+                format: uuid4
+                x-go-custom-tag: binding:"required"
+            app_id:
+                $ref: '#/definitions/appId'
+            code:
+                type: string
+                x-go-custom-tag: binding:"required"
+                example: '#PromoCode1'
+            created_at:
+                type: string
+                format: date-time
+            description:
+                type: string
+                example: Promo Code 1 description
+            term_and_condition:
+                type: string
+                example: Promo Code 1 term and condition
+            updated_at:
+                type: string
+                format: date-time
+            user:
+                $ref: '#/definitions/user'
+    usageAppId:
+        $ref: '#/definitions/appId'
+    usageCreatedAt:
+        $ref: '#/definitions/createdAt'
+    usageAuthId:
+        description: the auth ID
+        type: string
+    commonPromoResponse:
+        type: object
+        title: CommonPromoResponse
+        required:
+            - success
+        properties:
+            message:
+                type: string
+                example: A success message
+            success:
+                x-nullable: false
+                example: true
+                type: boolean
+            data:
+                $ref: '#/definitions/promoWithRules'
+    order:
+        type: object
+        title: Order
+        properties:
+            date:
+                x-nullable: false
+                type: string
+                format: date-time
+                x-go-custom-tag: binding:"required"
+            details:
+                description: the order details
+                type: array
+                items:
+                    $ref: '#/definitions/orderDetail'
+                x-go-custom-tag: binding:"required,dive,required"
+            id:
+                x-go-custom-tag: binding:"required"
+                x-nullable: false
+                description: the order ID
+                type: string
+            total_amount:
+                x-nullable: false
+                description: the total amount (currency) of a particular order
+                type: number
+                format: double
+                x-go-custom-tag: binding:"required"
+            total_qty:
+                description: the total quantity (items) of a particular order
+                type: number
+                format: double
+                x-go-custom-tag: binding:"required"
+                x-nullable: false
+    orderDetailUnit:
+        type: string
+        enum:
+            - kg
+            - sack
+            - pc
+        x-nullable: false
+        description: unit of weight. enum of kilograms (kg), pieces (pc), sacks (sack).
+    patchUsageStatusResponse:
+        properties:
+            data:
+                $ref: '#/definitions/promo'
+            message:
+                type: string
+                example: A success message
+            success:
+                type: boolean
+                x-nullable: false
+                example: true
+        type: object
+        title: PatchUsageStatusResponse
+        required:
+            - success
+    publicHttpError:
+        type: object
+        required:
+            - success
+        properties:
+            data:
+                type: object
+                properties:
+                    detail:
+                        example: Forbidden
+                        description: More detailed, human-readable, optional explanation of the error
+                        type: string
+                    status:
+                        x-go-name: Code
+                        example: !!float 403
+                        description: HTTP status code returned for the error
+                        type: integer
+                        format: int64
+                        maximum: !!float 599
+                        minimum: !!float 100
+                    type:
+                        description: Type of error returned, should be used for client-side error handling
+                        type: string
+                        example: generic
+            message:
+                type: string
+                example: User is lacking permission to access this resource
+                description: Short, human-readable description of the error
+            success:
+                type: boolean
+                x-nullable: false
+                example: true
+    publicHttpValidationError:
+        type: object
+        required:
+            - success
+        properties:
+            data:
+                properties:
+                    validation_errors:
+                        description: List of errors received while validating payload against schema
+                        type: array
+                        items:
+                            $ref: '#/definitions/httpValidationErrorDetail'
+                    detail:
+                        example: Forbidden
+                        description: More detailed, human-readable, optional explanation of the error
+                        type: string
+                    status:
+                        description: HTTP status code returned for the error
+                        type: integer
+                        format: int64
+                        maximum: !!float 599
+                        minimum: !!float 100
+                        x-go-name: Code
+                        example: !!float 403
+                    type:
+                        description: Type of error returned, should be used for client-side error handling
+                        type: string
+                        example: generic
+                type: object
+            message:
+                description: Short, human-readable description of the error
+                type: string
+                example: User is lacking permission to access this resource
+            success:
+                type: boolean
+                x-nullable: false
+                example: true
+    usageDetail:
+        type: object
+        properties:
+            usage_id:
+                description: the usage id
+                type: string
+                example: 7eb69750-8b36-4f61-81fe-a6a19bf25460
+            discount:
+                description: the discount amount user got for the sku / price list
+                type: number
+                format: double
+                example: !!float 10000
+            id:
+                type: string
+                format: uuid4
+                example: aeae2ec6-4422-4d5b-88ad-428e1a65ffc8
+                description: the usage detail id
+            price_list_id:
+                description: the price list affected by this promo
+                type: string
+                example: !!float 959
+            sku_id:
+                description: the sku affected by this promo
+                type: string
+    discountDetail:
+        title: DiscountDetail
+        properties:
+            sku_id:
+                description: sku id of order
+                type: string
+                example: "1991"
+            amount:
+                description: the total discount amount user got
+                type: number
+                format: double
+            is_promo_invalid:
+                description: flag the usage of promo is valid or not
+                type: boolean
+                x-omitempty: false
+            message:
+                type: string
+                example:
+                    - order date is not between promo range date
+                    - promo applied successfully
+                description: message for the particular discount
+            price_list_id:
+                description: price list id of order
+                type: string
+                example: "1995"
+        type: object
+    channel:
+        type: string
+        title: Channel
+        enum:
+            - feedhub
+            - efisheryku
+        x-go-custom-tag: binding:"required,oneof='feedhub' 'efisheryku'"
+        x-nullable: false
+    listPromoByOrderRequest:
+        title: ListPromoByOrderRequest
+        required:
+            - product_type
+            - channel
+            - order
+            - payment_method
+        properties:
+            payment_method:
+                $ref: '#/definitions/paymentMethod'
+            product_type:
+                $ref: '#/definitions/productType'
+            channel:
+                $ref: '#/definitions/channel'
+            order:
+                $ref: '#/definitions/order'
+        type: object
+    putPromoStatusRequest:
+        required:
+            - status
+        properties:
+            status:
+                $ref: '#/definitions/promoStatus'
+        type: object
+    usageDetails:
+        x-omitempty: false
+        type: array
+        items:
+            $ref: '#/definitions/usageDetail'
+    usageTotalDiscountAmount:
+        type: number
+        format: double
+        description: the total discount amount user got
+    getPromoUsageByOrderIDsRequest:
+        type: object
+        title: GetPromoUsageByOrderIDsRequest
+        required:
+            - order_ids
+        properties:
+            order_ids:
+                type: array
+                items:
+                    type: string
+                x-go-custom-tag: binding:"required"
+                example:
+                    - order_id_1
+                    - order_id_2
+    usagePromoId:
+        description: the promo ID
+        type: string
+        format: uuid4
+    listPromoResponse:
+        type: object
+        title: ListPromoResponse
+        required:
+            - success
+        properties:
+            data:
+                items:
+                    $ref: '#/definitions/promoWithRules'
+                type: array
+            message:
+                type: string
+                example: A success message
+            pagination:
+                $ref: '#/definitions/pagination'
+            success:
+                type: boolean
+                x-nullable: false
+                example: true
+    appId:
+        type: string
+        title: AppID
+        enum:
+            - efisheryku
+            - efresh
+            - feedhub
+            - fish-in-tools
+            - tambakan
+            - ffms
+        x-go-custom-tag: binding:"required,oneof='efisheryku' 'efresh' 'feedhub' 'fish-in-tools' 'tambakan' 'ffms'"
+    listPromoByOrderResponse:
+        type: object
+        title: ListPromoByOrderResponse
+        required:
+            - success
+        properties:
+            data:
+                items:
+                    $ref: '#/definitions/promoWithValidation'
+                type: array
+            message:
+                type: string
+                example: A success message
+            success:
+                type: boolean
+                x-nullable: false
+                example: true
+    ruleResponse:
+        type: object
+        title: RuleResponse
+        properties:
+            maximum_discount:
+                type: number
+                example: !!float 15000
+            promo_limit_type:
+                $ref: '#/definitions/promoLimitType'
+            start_date:
+                type: string
+                format: date-time
+            updated_at:
+                type: string
+                format: date-time
+            id:
+                type: string
+                format: uuid4
+            maximum_transaction_amount:
+                type: number
+            minimum_transaction_amount:
+                type: number
+            promo_quota:
+                type: number
+                format: double
+            promo_type:
+                $ref: '#/definitions/promoType'
+            promo_limit_qty:
+                type: integer
+            channels:
+                items:
+                    $ref: '#/definitions/channel'
+                type: array
+            created_at:
+                type: string
+                format: date-time
+            end_date:
+                type: string
+                format: date-time
+            product_type:
+                type: string
+                title: ProductType
+                enum:
+                    - feed
+                    - feeder
+                    - fish
+                    - shrimp
+                x-go-custom-tag: binding:"required,oneof='feed' 'feeder' 'fish' 'shrimp'"
+            promo_amount:
+                type: number
+                example: 12.5
+            promo_criteria:
+                $ref: '#/definitions/promoCriteria'
+            payment_methods:
+                items:
+                    $ref: '#/definitions/paymentMethod'
+                x-go-custom-tag: binding:"required,dive,required"
+                type: array
+            segmentation:
+                $ref: '#/definitions/segmentation'
+    getPromoUsageByOrderIDsResponse:
+        type: object
+        title: GetPromoUsageByOrderIDsResponse
+        required:
+            - success
+        properties:
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/usageResponse'
+            message:
+                type: string
+                example: A success message
+            success:
+                type: boolean
+                x-nullable: false
+                example: true
+    promoCriteria:
+        title: PromoCriteria
+        properties:
+            suppliers:
+                items:
+                    type: string
+                example:
+                    - 884d382d-e442-49be-8415-81350072d88d
+                    - d621c23d-a6d6-4433-8ed8-01a5869fb3f1
+                type: array
+            weight:
+                type: object
+                properties:
+                    unit:
+                        $ref: '#/definitions/orderDetailUnit'
+                    amount:
+                        description: the amount of weight
+                        type: number
+                        format: double
+                        example: !!float 16
+            brands:
+                items:
+                    type: string
+                example:
+                    - 884d382d-e442-49be-8415-81350072d88d
+                    - d621c23d-a6d6-4433-8ed8-01a5869fb3f1
+                type: array
+            price_lists:
+                example:
+                    - 884d382d-e442-49be-8415-81350072d88d
+                    - SOME_PRICE_LIST
+                type: array
+                items:
+                    type: string
+            skus:
+                type: array
+                items:
+                    type: string
+                example:
+                    - 884d382d-e442-49be-8415-81350072d88d
+                    - d621c23d-a6d6-4433-8ed8-01a5869fb3f1
+        type: object
+    rule:
+        type: object
+        title: Rule
+        properties:
+            segmentation:
+                $ref: '#/definitions/segmentation'
+            end_date:
+                type: string
+                format: date-time
+                x-go-custom-tag: binding:"required,time_after_field=StartDate,time_after_now"
+            minimum_transaction_amount:
+                type: number
+                x-go-custom-tag: binding:"min=0,ltefield=MaximumTransactionAmount"
+            promo_quota:
+                type: number
+                format: double
+                x-go-custom-tag: binding:"min=0"
+            promo_type:
+                $ref: '#/definitions/promoType'
+            channels:
+                type: array
+                items:
+                    $ref: '#/definitions/channel'
+                x-go-custom-tag: binding:"required,dive,required"
+            maximum_transaction_amount:
+                type: number
+                x-go-custom-tag: binding:"min=0,gtefield=MinimumTransactionAmount"
+            promo_criteria:
+                $ref: '#/definitions/promoCriteria'
+            promo_limit_qty:
+                type: integer
+                x-go-custom-tag: binding:"required_with=PromoLimitType,min=0"
+            promo_limit_type:
+                $ref: '#/definitions/promoLimitType'
+            start_date:
+                type: string
+                format: date-time
+                x-go-custom-tag: binding:"required"
+            id:
+                type: string
+                format: uuid4
+            payment_methods:
+                type: array
+                items:
+                    $ref: '#/definitions/paymentMethod'
+                x-go-custom-tag: binding:"required,dive,required"
+            promo_amount:
+                type: number
+                x-go-custom-tag: binding:"required,min=0,max_if_field_eq=100 PromoType 'percentage'"
+                example: 12.5
+            maximum_discount:
+                type: number
+                x-go-custom-tag: binding:"required_if=PromoType 'percentage'"
+                example: !!float 15000
+            product_type:
+                type: string
+                title: ProductType
+                enum:
+                    - feed
+                    - feeder
+                    - fish
+                    - shrimp
+                x-go-custom-tag: binding:"required,oneof='feed' 'feeder' 'fish' 'shrimp'"
+    updatedAt:
+        type: string
+        format: date-time
+    deletePromoResponse:
+        type: object
+        title: DeletePromoResponse
+        required:
+            - success
+        properties:
+            success:
+                type: boolean
+                x-nullable: false
+                example: true
+            message:
+                type: string
+                example: A success message
+    usageOrderId:
+        description: the order ID
+        type: string
+    createdAt:
+        type: string
+        format: date-time
+    discount:
+        type: object
+        title: Discount
+        properties:
+            amount:
+                description: the total discount amount user got
+                type: number
+                format: double
+                x-omitempty: false
+            details:
+                items:
+                    $ref: '#/definitions/discountDetail'
+                x-omitempty: false
+                description: details of discount each sku. omit if empty
+                type: array
+            is_promo_invalid:
+                description: flag the usage of promo is valid or not
+                type: boolean
+                x-omitempty: false
+            message:
+                description: message for the particular discount
+                type: string
+                x-omitempty: false
+                example:
+                    - order date is not between promo range date
+                    - promo applied successfully
+    listPromoByUserResponse:
+        required:
+            - success
+        properties:
+            data:
+                type: array
+                items:
+                    $ref: '#/definitions/promoWithRules'
+            message:
+                type: string
+                example: A success message
+            success:
+                type: boolean
+                x-nullable: false
+                example: true
+        type: object
+        title: ListPromoByUserResponse
+    pagination:
+        type: object
+        title: Pagination
+        properties:
+            next_url:
+                description: url of the next page if exist
+                type: string
+                example: /?offset=10&limit=5
+            prev_url:
+                description: url of the previous page if exist
+                type: string
+                example: /?offset=0&limit=5
+            total_datas:
+                description: number of total datas that can be acquired
+                type: integer
+                example: !!float 2500
+            total_pages:
+                description: \[offset only\] number of total pages
+                type: integer
+                example: !!float 100
+            current_datas:
+                description: number of data returned
+                type: integer
+                example: !!float 10
+            current_page:
+                description: \[offset only\] number of current page
+                type: integer
+                example: !!float 1
+    patchUsageStatusRequest:
+        type: object
+        title: PatchUsageStatusRequest
+        required:
+            - order_id
+            - status
+        properties:
+            order_id:
+                type: string
+                x-go-custom-tag: binding:"required"
+                example: ORDER-1234
+            status:
+                $ref: '#/definitions/usageStatus'
+    segmentation:
+        type: object
+        title: Segmentation
+        properties:
+            phones:
+                type: array
+                items:
+                    type: string
+                example:
+                    - !!float 6285704856007
+            points:
+                items:
+                    type: string
+                example:
+                    - 884d382d-e442-49be-8415-81350072d88d
+                    - !!float 1235
+                type: array
+            users:
+                type: array
+                items:
+                    type: string
+                example:
+                    - 884d382d-e442-49be-8415-81350072d88d
+                    - d621c23d-a6d6-4433-8ed8-01a5869fb3f1
+                description: this field contains user's UUID from app user
+    orderDetail:
+        type: object
+        title: OrderDetail
+        required:
+            - total_amount
+            - total_qty
+            - unit
+        properties:
+            brand_id:
+                description: the ID of a particular brand
+                type: string
+                example: "1993"
+            price_list_id:
+                example: "1995"
+                description: the ID of a particular price list
+                type: string
+            product_id:
+                type: string
+                example: "1994"
+                description: the ID of a particular product
+            sku_id:
+                description: the ID of a particular SKU
+                type: string
+                x-go-custom-tag: binding:"required_without=PriceListID"
+                x-nullable: false
+                example: "1991"
+            supplier_id:
+                description: the ID of a particular supplier
+                type: string
+                example: "1992"
+            total_amount:
+                description: the total amount (currency) of a particular order detail
+                type: number
+                x-go-custom-tag: binding:"required"
+                x-nullable: false
+            total_qty:
+                x-go-custom-tag: binding:"required"
+                x-nullable: false
+                description: the total quantity (items) of a particular order detail
+                type: number
+            unit:
+                $ref: '#/definitions/orderDetailUnit'
+    promo:
+        type: object
+        title: Promo
+        properties:
+            app_id:
+                $ref: '#/definitions/appId'
+            description:
+                type: string
+                example: Promo Code 1 description
+            id:
+                type: string
+                format: uuid4
+            priority:
+                type: integer
+                example: !!float 10
+            term_and_condition:
+                type: string
+                example: Promo Code 1 term and condition
+            user_id:
+                type: string
+                format: uuid4
+                x-go-custom-tag: binding:"required"
+            code:
+                type: string
+                x-go-custom-tag: binding:"required"
+                example: '#PromoCode1'
+            name:
+                type: string
+                x-go-custom-tag: binding:"required"
+                example: Promo Code 1
+            rule_id:
+                x-go-custom-tag: binding:"required"
+                type: string
+                format: uuid4
+            status:
+                $ref: '#/definitions/promoStatus'
+    promoLimitType:
+        type: string
+        title: PromoLimitType
+        enum:
+            - user
+    promoStatus:
+        type: string
+        enum:
+            - draft
+            - published
+            - expired
+            - excess_limit
+            - unpublished
+        x-go-custom-tag: binding:"required"
+    user:
+        type: object
+        properties:
+            email:
+                type: string
+            id:
+                type: string
+                format: uuid4
+            auth_id:
+                type: string
+                format: uuid4
+    applyPromoRequest:
+        required:
+            - promo_id
+            - product_type
+            - channel
+            - order
+            - payment_method
+        properties:
+            channel:
+                $ref: '#/definitions/channel'
+            order:
+                $ref: '#/definitions/order'
+            payment_method:
+                $ref: '#/definitions/paymentMethod'
+            product_type:
+                $ref: '#/definitions/productType'
+            promo_id:
+                x-nullable: false
+                type: string
+                format: uuid4
+                x-go-custom-tag: binding:"required"
+        type: object
+        title: ApplyPromoRequest
+    commonPromoRequest:
+        type: object
+        title: CommonPromoRequest
+        properties:
+            rules:
+                $ref: '#/definitions/rule'
+            status:
+                $ref: '#/definitions/promoStatus'
+            term_and_condition:
+                type: string
+                x-go-custom-tag: binding:"required"
+                example: Terms and conditions example
+            code:
+                type: string
+                x-go-custom-tag: binding:"required"
+                example: '#Promo1'
+            description:
+                type: string
+                example: Description
+            image_url:
+                type: string
+                example: https://image.example.com/image-1
+            name:
+                type: string
+                x-go-custom-tag: binding:"required"
+                example: Promo 1
+            priority:
+                type: number
+                format: double
+    listPromoByUserRequest:
+        required:
+            - channel
+        properties:
+            channel:
+                $ref: '#/definitions/channel'
+        type: object
+        title: ListPromoByUserRequest
+    paymentMethod:
+        type: string
+        title: PaymentMethod
+        enum:
+            - cash
+            - kabayan
+        x-go-custom-tag: binding:"required,oneof='cash' 'kabayan'"
+        x-nullable: false
+    productType:
+        type: string
+        title: ProductType
+        enum:
+            - feed
+            - feeder
+            - fish
+            - shrimp
+        x-go-custom-tag: binding:"required,oneof='feed' 'feeder' 'fish' 'shrimp'"
+        x-nullable: false
+    usageResponse:
+        type: object
+        properties:
+            auth_id:
+                $ref: '#/definitions/usageAuthId'
+            order_id:
+                $ref: '#/definitions/usageOrderId'
+            promo:
+                $ref: '#/definitions/promoWithRules'
+            promo_id:
+                $ref: '#/definitions/usagePromoId'
+            status:
+                $ref: '#/definitions/usageStatus'
+            total_discount_amount:
+                $ref: '#/definitions/usageTotalDiscountAmount'
+            total_order_amount:
+                $ref: '#/definitions/usageTotalOrderAmount'
+            app_id:
+                $ref: '#/definitions/usageAppId'
+            details:
+                $ref: '#/definitions/usageDetails'
+            updated_at:
+                $ref: '#/definitions/usageUpdatedAt'
+            created_at:
+                $ref: '#/definitions/usageCreatedAt'
+    usageUpdatedAt:
+        $ref: '#/definitions/updatedAt'
+    applyPromoResponse:
+        type: object
+        title: ApplyPromoResponse
+        required:
+            - success
+        properties:
+            data:
+                type: object
+                properties:
+                    discount:
+                        $ref: '#/definitions/discount'
+                    order:
+                        $ref: '#/definitions/order'
+                    promo:
+                        $ref: '#/definitions/promoWithRules'
+            message:
+                type: string
+                example: A success message
+            success:
+                example: true
+                type: boolean
+                x-nullable: false
+    httpValidationErrorDetail:
+        type: object
+        properties:
+            error:
+                description: Error describing field validation failure
+                type: string
+            in:
+                description: Indicates how the invalid field was provided
+                type: string
+            key:
+                description: Key of field failing validation
+                type: string
+securityDefinitions:
+    bearerAuth:
+        in: header
+        x-keyPrefix: 'Bearer '
+        description: |-
+            Access token for application access, **must** include "Bearer " prefix.
+            Example: `Bearer b4a94a42-3ea2-4af3-9699-8bcbfee6e6d2`
+        type: apiKey
+        name: Authorization
